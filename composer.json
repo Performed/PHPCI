@@ -35,6 +35,7 @@
     },
 
     "require": {
+        "doctrine/instantiator": "1.0.2",
         "php": ">=5.3.8",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
