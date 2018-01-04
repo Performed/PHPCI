@@ -24,6 +24,7 @@ class CopyBuild implements \PHPCI\Plugin
     protected $directory;
     protected $ignore;
     protected $wipe;
+    protected $wipe_exclude;
     protected $phpci;
     protected $build;
 
@@ -40,6 +41,7 @@ class CopyBuild implements \PHPCI\Plugin
         $this->build     = $build;
         $this->directory = isset($options['directory']) ? $options['directory'] : $path;
         $this->wipe      = isset($options['wipe']) ?  (bool)$options['wipe'] : false;
+        $this->wipe_exclude = isset($options['wipe_exclude']) ?  (array)$options['wipe_exclude'] : array();
         $this->ignore    = isset($options['respect_ignore']) ?  (bool)$options['respect_ignore'] : false;
     }
 
