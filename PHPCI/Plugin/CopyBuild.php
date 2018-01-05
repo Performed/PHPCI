@@ -14,17 +14,16 @@ use PHPCI\Model\Build;
 use PHPCI\Helper\Lang;
 
 /**
-* Copy Build Plugin - Copies the entire build to another directory.
-* @author       Dan Cryer <dan@block8.co.uk>
-* @package      PHPCI
-* @subpackage   Plugins
-*/
+ * Copy Build Plugin - Copies the entire build to another directory.
+ * @author       Dan Cryer <dan@block8.co.uk>
+ * @package      PHPCI
+ * @subpackage   Plugins
+ */
 class CopyBuild implements \PHPCI\Plugin
 {
     protected $directory;
     protected $ignore;
     protected $wipe;
-    protected $wipe_exclude;
     protected $phpci;
     protected $build;
 
@@ -41,13 +40,12 @@ class CopyBuild implements \PHPCI\Plugin
         $this->build     = $build;
         $this->directory = isset($options['directory']) ? $options['directory'] : $path;
         $this->wipe      = isset($options['wipe']) ?  (bool)$options['wipe'] : false;
-        $this->wipe_exclude = isset($options['wipe_exclude']) ?  (array)$options['wipe_exclude'] : array();
         $this->ignore    = isset($options['respect_ignore']) ?  (bool)$options['respect_ignore'] : false;
     }
 
     /**
-    * Copies files from the root of the build directory into the target folder
-    */
+     * Copies files from the root of the build directory into the target folder
+     */
     public function execute()
     {
         $build = $this->phpci->buildPath;
@@ -78,23 +76,13 @@ class CopyBuild implements \PHPCI\Plugin
     protected function wipeExistingDirectory()
     {
         if ($this->wipe === true && $this->directory != '/' && is_dir($this->directory)) {
-            $directory = $this->directory;
-            $wipe_exclude = array_reduce($this->wipe_exclude, function ($c, $path) use ($directory) {
-                return $c . ' -not -path "' . rtrim($directory, '/') . '/' . rtrim($path, '/') . '"';
-            }, '');
-
-            // delete all files except excluded.
-            $cmd = 'find "%s" -type f' . $wipe_exclude . ' -delete';
+            $cmd = 'rm -Rf "%s*"';
             $success = $this->phpci->executeCommand($cmd, $this->directory);
-            // delete all empty directories.
-            $cmd = 'find "%s" -type d -empty -delete';
-            $success &= $this->phpci->executeCommand($cmd, $this->directory);
 
             if (!$success) {
                 throw new \Exception(Lang::get('failed_to_wipe', $this->directory));
             }
         }
-
     }
 
     /**
