@@ -84,9 +84,9 @@ abstract class BaseCommandExecutor implements CommandExecutor
 
         $status = 0;
         $descriptorSpec = array(
-            0 => array("pipe", "r"),  // stdin
-            1 => array("pipe", "w"),  // stdout
-            2 => array("pipe", "w"),  // stderr
+            0 => array("pipe", "rb"),  // stdin
+            1 => array("pipe", "wb"),  // stdout
+            2 => array("pipe", "wb"),  // stderr
         );
 
         $pipes = array();
