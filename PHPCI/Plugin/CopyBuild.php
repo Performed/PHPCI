@@ -21,6 +21,7 @@ use PHPCI\Helper\Lang;
  */
 class CopyBuild implements \PHPCI\Plugin
 {
+    protected $subfolder;
     protected $directory;
     protected $ignore;
     protected $wipe;
@@ -38,6 +39,7 @@ class CopyBuild implements \PHPCI\Plugin
         $path            = $phpci->buildPath;
         $this->phpci     = $phpci;
         $this->build     = $build;
+        $this->subfolder = isset($options['subfolder']) ? $options['subfolder'] : "";
         $this->directory = isset($options['directory']) ? $options['directory'] : $path;
         $this->wipe      = isset($options['wipe']) ?  (bool)$options['wipe'] : false;
         $this->ignore    = isset($options['respect_ignore']) ?  (bool)$options['respect_ignore'] : false;
@@ -55,6 +57,8 @@ class CopyBuild implements \PHPCI\Plugin
         }
 
         $this->wipeExistingDirectory();
+
+        $build = rtrim($build, '/') . '/' .ltrim($this->subfolder, '/');
 
         // $cmd = 'mkdir -p "%s" && cp -R "%s" "%s"';
         $cmd = 'mkdir -p "%s" && cd "%s" && cp -R . "%s" && cd ..';
